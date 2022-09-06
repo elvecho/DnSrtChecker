@@ -1,0 +1,407 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.ModelsFunctions.TransmissionsList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="">
+        <div>
+            <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+            <h2 class="titlePage">Trasmissioni </h2>
+
+            <div>
+                <h4 class="titlePage" style="display:inline-block;">Server RT : </h4><label class="control-label" style="font-size: 16px;"> &nbsp;@(ViewBag.ServerRt ?? String.Empty)</label>
+            </div>
+            <div>
+                <h4 class="titlePage" style="display:inline-block;">Punto Vendita : </h4><label class="control-label" style="font-size: 16px;">&nbsp;@(ViewBag.GroupDescription ?? String.Empty) @(@ViewBag.RetailDescription ?? String.Empty)</label>
+            </div>
+            <input type="hidden" value="@ViewBag.date" id="date" />
+            <input type="hidden" value="@ViewBag.storeId" id="storeId" />
+            <input type="hidden" value="@ViewBag.storeGroupId" id="storeGroupId" />
+            <input type="hidden" id="rtServerId" value="@ViewBag.ServerRt" />
+            <hr />
+        </div>
+    </div>
+    <div class="">
+        @if (!ViewBag.timeOut)
+        {
+            <div class="panel panel-default">
+                <input type="hidden" class="OperationClosureDatetimeHidden" value="@Html.DisplayFor(it=>Model.FirstOrDefault().dRtDeviceClosureDateTime)" id="OperationClosureDatetimeHidden" />
+
+                <div class="">
+                    <table class="table table-bordered tableTr">
+                        <thead>
+                            <tr>
+                                <th colspan="10"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="10">
+                                    <h3 class="text-center" style="font-family:RalewayBold">Giorno:&nbsp; @ViewBag.date </h3>
+
+                                </th>
+                            </tr>
+                            @*<tr>
+                                <th colspan="10"></th>
+                            </tr>*@
+                            <tr>
+                                <td colspan="10">
+                                    <input type="hidden" class="OperationClosureDatetimeHidden" value="@Html.DisplayFor(it=>Model.FirstOrDefault().dRtDeviceClosureDateTime)" id="OperationClosureDatetimeHidden" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 15%" rowspan="2">Totale TP :</th>
+                                <td style="width: 10%; background-color:white">
+                                    @(((decimal)ViewBag.DTotalTP).ToString("C2"))
+                                </td>
+                                <th style="width: 15%" rowspan="2">Totale RT :</th>
+                                <td style="width: 10%; background-color:white">
+                                    @(((decimal)ViewBag.DTotalRT).ToString("C2"))
+                                </td>
+                                <th style="width: 20%" rowspan="2">Totale AdE :</th>
+                                <td style="width: 10%; text-align: center; background-color: white" rowspan="2">
+                                    @(((decimal)ViewBag.DTotaleADE).ToString("C2"))
+                                </td>
+                                <th style="width: 5%" rowspan="2">
+                                    @if (ViewBag.MismatchTPAdE != 0 || ViewBag.MismatchRTAdE != 0)
+                                    {
+                                        <i class="fa fa-circle" style="color:#ff0101"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-circle" style="color:#33cc33"></i>
+                                    }
+                                </th>
+
+                            </tr>
+                            <tr>
+                                <td style="width: 10%; background-color:white">
+                                    @(((decimal)ViewBag.MismatchTPAdE).ToString("C2"))
+                                </td>
+                                <td style="width: 10%; background-color:white">
+                                    @(((decimal)ViewBag.MismatchRTAdE).ToString("C2"))
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="10"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="row divider">
+                    &nbsp;
+                </div>
+
+                <div class="panel-body panel-table bodyCollapseTrx" style="display:none;">
+                    @foreach (var dev in Model.GroupBy(x => x.szRtDeviceID).OrderBy(x => x.Key).ToList())
+                    {
+                        @if (dev != null && !string.IsNullOrEmpty(dev.Key))
+                        {
+                            foreach (var trans in Model.Where(d => d.szRtDeviceID ==
+                        dev.Key).GroupBy(tran => tran.lRtDeviceTransmissionID))
+                            {
+                                <div class="row divider">&nbsp;</div>
+                                <table class="table table-bordered tableTr transmissionTable">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10"><partial name="_LoadingPartial" /></th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <th style="text-align:right;">Dispositivo :&nbsp;</th>
+                                            <td style="width: 10%; background-color:white">
+                                                @Html.DisplayFor(d => Model.Where(x => x.szRtDeviceID
+                                           == dev.Key).First().szRtDeviceID)
+                                            </td>
+
+                                            <th style="text-align:left;">Trasmissione :&nbsp;</th>
+                                            @*<td colspan="1">@Html.DisplayFor(d => c.LRtDeviceTransmissionId)</td>*@
+                                            <td style="width: 10%; background-color:white">
+                                                @Html.DisplayFor(d => Model.Where(x => x.szRtDeviceID
+                           == dev.Key).First().lRtDeviceTransmissionID)
+                                            </td>
+                                            <th style="text-align:right;">ID Operazione :&nbsp;</th>
+                                            @*<td colspan="1">@Html.DisplayFor(d => c.LRtServerOperationId)</td>*@
+                                            <td style="width: 10%; background-color:white">
+                                                @Html.DisplayFor(d => Model.Where(x => x.szRtDeviceID
+                           == dev.Key).First().LRtServerOperationId)
+                                            </td>
+                                            <td></td>
+                                            @if (Model.Where(x => x.szRtDeviceID
+                           == dev.Key).First().DSumAmount != Model.Where(x => x.szRtDeviceID
+                            == dev.Key).First().TotalADED || Model.Where(x => x.szRtDeviceID
+                             == dev.Key).First().TotalTPD != Model.Where(x => x.szRtDeviceID
+                              == dev.Key).First().TotalADED)
+                                            {
+                                                <td onclick="window.location.href ='@Url.Action("Filter", "Transactions", new
+                                                                       {
+                                                            ServerRt = Model.Where(x=> x.szRtDeviceID
+                                                            == dev.Key).First().szRtServerID,
+                                                            StoreID = @ViewBag.storeId,
+                                                            StoreGroupID = @ViewBag.storeGroupId,
+                                                            Store= @ViewBag.RetailDescription,
+                                                            StoreGroup=@ViewBag.GroupDescription
+                                                            ,TransactionDateTo=String.Format("{0:yyyy-MM-dd}",
+                                                            Model.Where(x=> x.szRtDeviceID
+                                                            == dev.Key).First().dRtDeviceClosureDateTime)
+                                                            ,TransactionDateFrom=String.Format("{0:yyyy-MM-dd}",
+                                                            Model.Where(x=> x.szRtDeviceID
+                                                            == dev.Key).First().dRtDeviceClosureDateTime)
+
+                                                                       })'">
+
+                                                    <div class="hoverInfo">
+                                                        <span title="Dettagli transazioni">
+                                                            <i class="fa fa-info-circle " style="color: #808080 ;" onclick="displayBusyIndicator()"></i>
+                                                        </span>
+                                                    </div>
+                                                    @* <div class="tooltip">
+                                                            <span class="tooltiptext"  title="Dettagli transazioni">
+                                                                Dettagli transazioni
+                                                            </span>
+                                                            <i class="fa fa-info-circle " style="color: #808080 ;"></i>
+                                                        </div>*@
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td onclick="window.location.href ='@Url.Action("Filter", "Transactions",
+                                                        new  { ServerRt = Model.Where(x=> x.szRtDeviceID
+                                                           == dev.Key).First().szRtServerID,
+                                                            StoreID = @ViewBag.storeId,
+                                                            StoreGroupID = @ViewBag.storeGroupId,
+                                                            Store= @ViewBag.RetailDescription,
+                                                            StoreGroup=@ViewBag.GroupDescription,
+                                                            TransactionDateTo=String.Format("{0:yyyy-MM-dd}",
+                                                            Model.Where(x=> x.szRtDeviceID == dev.Key).First().dRtDeviceClosureDateTime)
+                                                            ,TransactionDateFrom=String.Format("{0:yyyy-MM-dd}",
+                                                            Model.Where(x=> x.szRtDeviceID == dev.Key).First().dRtDeviceClosureDateTime)
+
+                                                                                                                        })'">
+                                                    <div class="hoverInfo">
+                                                        <span title="Dettagli transazioni">
+                                                            <i class="fa fa-info-circle " style="color: #808080 ;"></i>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            }
+                                        </tr>
+                                        <tr>
+                                            <th colspan="10"></th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 6%">% IVA</th>
+                                            <th style="width: 5%">Natura</th>
+                                            <th style="width: 11%">Vendite</th>
+                                            <th style="width: 11%">Annulli</th>
+                                            <th style="width: 12%">Resi</th>
+                                            <th style="width: 10%">Imposta</th>
+                                            <th style="width: 13%">Importo AdE</th>
+                                            <th style="width: 13%">Importo TP</th>
+                                            <th style="width: 13%">Diff. TP - AdE</th>
+                                            <th style="width: 4%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var tv in Model.OrderBy(x => x.dvatrate))
+                                        {
+                                            if (tv.szRtDeviceID == Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().szRtDeviceID)
+                                            {
+                                                <tr>
+                                                    <td>@tv.dvatrate.ToString("0.00")</td>
+                                                    <td>@Html.DisplayFor(x => tv.SzVatNature)</td>
+                                                    <td>@Html.DisplayFor(x => tv.SaleAmountD)</td>
+                                                    <td>@Html.DisplayFor(x => tv.ReturnAmountD)</td>
+                                                    <td>@Html.DisplayFor(x => tv.voidAmountD)</td>
+                                                    <td>@Html.DisplayFor(x => tv.VatAmountD)</td>
+                                                    <td>@Html.DisplayFor(x => tv.TotalADED)</td>
+                                                    <td>@Html.DisplayFor(x => tv.TotalTPD)</td>
+                                                    <td>
+                                                        @(((Decimal)(tv.TotalTPD-tv.TotalADED)).ToString("C2"))
+                                                    </td>
+                                                    <td>
+                                                        @if ((tv.SaleAmountD + tv.VatAmountD -
+                                                     tv.ReturnAmountD - tv.voidAmountD
+                                                     != tv.TotalADED) || (tv.TotalTPD != tv.TotalADED))
+                                                        {
+                                                            <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                // Model.Where(x => x.szRtDeviceID
+                                                //== dev.Key).First().DSaleAmountSum += tv.SaleAmountD;
+                                                Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DReturnAmountSum += tv.ReturnAmountD;
+                                                Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DvoidAmountSum += tv.voidAmountD;
+                                                Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DVatAmountSum += tv.VatAmountD;
+                                                // Model.Where(x => x.szRtDeviceID
+                                                //== dev.Key).First().DTotalADESum += tv.TotalADED;
+                                                // Model.Where(x => x.szRtDeviceID
+                                                //== dev.Key).First().TotalTPSum += tv.TotalTPD;
+                                            }
+                                        }
+                                        <tr>
+                                            <th colspan="2"><b>Totale</b></th>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                           == dev.Key).First().DSaleAmountSum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DReturnAmountSum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DvoidAmountSum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DVatAmountSum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().DTotalADESum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @Html.DisplayFor(x => Model.Where(x => x.szRtDeviceID
+                                               == dev.Key).First().TotalTPSum)
+                                                </b>
+                                            </td>
+                                            <td>
+                                                <b>
+                                                    @(((Decimal)(Model.Where(x => x.szRtDeviceID
+                                   == dev.Key).First().TotalTPSum -
+                                        Model.Where(x => x.szRtDeviceID
+                                   == dev.Key).First().DTotalADESum)).ToString("C2"))
+                                                </b>
+                                            </td>
+                                            <td>
+                                                @if (Model.Where(x => x.szRtDeviceID
+                                        == dev.Key).First().DSaleAmountSum + Model.Where(x => x.szRtDeviceID
+                                       == dev.Key).First().DVatAmountSum - Model.Where(x => x.szRtDeviceID
+                                         == dev.Key).First().DReturnAmountSum - Model.Where(x => x.szRtDeviceID
+                                          == dev.Key).First().DvoidAmountSum != Model.Where(x => x.szRtDeviceID
+                                       == dev.Key).First().DTotalADESum || Model.Where(x => x.szRtDeviceID
+                                          == dev.Key).First().TotalTPSum != Model.Where(x => x.szRtDeviceID
+                                          == dev.Key).First().DTotalADESum)
+                                                {
+                                                    <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row divider">&nbsp;</div>
+
+                            }
+                        }
+
+                    }
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="alert">
+                Le selezioni impostate non hanno ottenuto risposta nel tempo massimo previsto. Modificare le selezioni o riprovare più tardi.
+            </div>
+        }
+    </div>
+
+
+</div>
+<div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <span class="fa fa-spinner fa-spin fa-2x"></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="checkNoteTrx" tabindex="-1" role="dialog" aria-labelledby="NoteModalLabelTrx" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header header-modal" style="display:block;">
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:left;">
+                        <h5 class="title-modal titlePage" id="exampleModalLabel">Note Verifica</h5>
+                    </div>
+                    <div class="col-sm-6" style="text-align:right;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="checkedNote" class="col-form-label"></label>
+                    <textarea class="form-control " id="checkedNoteInputTrx" rows="5"></textarea>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-manage" id="saveCheckNoteTrx" onclick="editCheckNoteTrx()">Salva</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="logModalTrx" tabindex="-1" role="dialog" aria-labelledby="DocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="min-width:650px;">
+        <div class="modal-content">
+            <div class="modal-header header-modal" style="display:block;">
+                <div class="row">
+                    <div class="col-sm-6" style="text-align:left;">
+                        <h5 class="title-modal titlePage" id="logModalLabel">Attività Utenti</h5>
+                    </div>
+                    <div class="col-sm-6" style="text-align:right;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <div id="documentBodyLog">
+                        <div id="textLog" style="overflow-y:scroll;height:400px;">
+                            <div class="timeline" id="textUserLog">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*End Modal*@

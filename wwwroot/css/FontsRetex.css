@@ -1,0 +1,207 @@
+﻿
+/*Import fonts Retex*/
+/*Font Poppins*/
+@font-face {
+    font-family: 'PoppinsBold';
+    src: url(/font/Poppins/Poppins-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'PoppinsLight';
+    src: url(/font/Poppins/Poppins-Light.ttf);
+}
+
+@font-face {
+    font-family: 'Poppinsmedium';
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+}
+
+@font-face {
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+    font-family: 'PoppinsRegular';
+}
+
+@font-face {
+    font-family: 'PoppinsSemiBold';
+    src: url(/font/Poppins/Poppins-SemiBold.ttf);
+}
+
+@font-face {
+    font-family: 'Poppinsmedium';
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'Poppinsmedium';
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'Poppinsmedium';
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'Poppinsmedium';
+    src: url(/font/Poppins/Poppins-Medium.ttf);
+}
+
+/*Font Raleway*/
+@font-face {
+    font-family: 'RalewayBlack';
+    src: url('/font//Raleway/Raleway-Black.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayBlackItalic';
+    src: url('/font//Raleway//Raleway-BlackItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayBold';
+    src: url('/font//Raleway/Raleway-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayBoldItalic';
+    src: url('/font//Raleway/Raleway-BoldItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayExtraBoldItalic';
+    src: url('/font//Raleway/Raleway-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayExtraBold';
+    src: url('/font//Raleway/Raleway-ExtraBold.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayExtraLight';
+    src: url('/font//Raleway/Raleway-ExtraLight.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayExtraLightItalic';
+    src: url('/font//Raleway/Raleway-ExtraLightItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayItalic';
+    src: url('/font//Raleway/Raleway-Italic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayLight';
+    src: url('/font//Raleway/Raleway-Light.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayLightItalic';
+    src: url('/font//Raleway/Raleway-LightItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayMedium';
+    src: url('/font//Raleway/Raleway-Medium.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayMediumItalic';
+    src: url('/font//Raleway/Raleway-MediumItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayRegular';
+    src: url('/font//Raleway/Raleway-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'RalewaySemiBold';
+    src: url('/font//Raleway/Raleway-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: 'RalewaySemiBoldItalic';
+    src: url('/font//Raleway/Raleway-SemiBoldItalic.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayThin';
+    src: url('/font/Raleway/Raleway-Thin.ttf');
+}
+
+@font-face {
+    font-family: 'RalewayThinItalic';
+    src: url('/font/Raleway/Raleway-ThinItalic.ttf');
+}
+/*font Sofia*/
+@font-face {
+    font-family: 'Sofia Pro Black Italic';
+    src: url('/font/sofia/Sofia Pro Black Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Black';
+    src: url('/font/sofia/Sofia Pro Black.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Bold Italic';
+    src: url('/font/sofia/Sofia Pro Bold Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Bold';
+    src: url('/font/sofia/Sofia Pro Bold.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro ExtraLight Italic';
+    src: url('/font/sofia/Sofia Pro ExtraLight Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro ExtraLight.otf';
+    src: url('/font/sofia/Sofia Pro ExtraLight.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Light Italic';
+    src: url('/font/sofia/Sofia Pro Light Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Light';
+    src: url('/font/sofia/Sofia Pro Light.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Medium Italic';
+    src: url('/font/sofia/Sofia Pro Medium Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Medium';
+    src: url('/font/sofia/Sofia Pro Medium.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Regular Italic';
+    src: url('/font/sofia/Sofia Pro Regular Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Regular';
+    src: url('/font/sofia/Sofia Pro Regular.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Semi Bold Italic';
+    src: url('/font/sofia/Sofia Pro Semi Bold Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Semi Bold';
+    src: url('/font/sofia/Sofia Pro Semi Bold.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro UltraLight Italic';
+    src: url('/font/sofia/Sofia Pro UltraLight Italic.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro UltraLight';
+    src: url('/font/sofia/Sofia Pro UltraLight.otf');
+}
+@font-face {
+    font-family: 'Sofia Pro Regular Italic';
+    src: url('/font/sofia/Sofia Pro Regular Italic.otf');
+}

@@ -1,0 +1,488 @@
+﻿@model DnSrtChecker.Models.ViewModels.TransactionAffiliationViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6" style="text-align:left">
+            <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+        </div>
+        <div class="col-sm-6" style="text-align:right">
+            <a onclick="window.open('https://@Model.RtServer.SzIpAddress')" class="btn btn-manage" style="text-align:right"><i class="fa fa-server iconColorStyleRetex"></i></a>
+        </div>
+    </div>
+    <div class="">
+        <h2 class="titlePage" style="font-family:RalewayBold">Dettaglio della transazione</h2>
+        <div>
+            <h4 class="titlePage" style="display: inline-block; font-family: RalewayBold;">Server RT : </h4><label class="control-label" style="font-size: 16px; font-family: RalewayBold"> &nbsp;@Model.SzRtServerId</label>
+        </div>
+        <div>
+            <h4 class="titlePage" style="display:inline-block;">Punto Vendita : </h4><label class="control-label" style="font-size: 16px;">&nbsp;@Model.RtServer.L.LStoreGroup.SzDescription @Model.RtServer.L.StoreNameComplet</label>
+        </div>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table table-bordered tableDetail">
+                <thead>
+                    <tr>
+                        <th colspan="2"> Informazioni TP </th>
+                        <th colspan="4">Valore</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="idTransaction" style="display:none;">@Model.SzRtDocumentId</td>
+                        <td id="rtServerId" style="display:none;">@Model.SzRtServerId</td>
+                        <td id="retailStoreId" style="display:none;">@Model.LRetailStoreId</td>
+                        <td id="storeGroupId" style="display:none;">@Model.LStoreGroupId</td>
+                        <th colspan="2">Numero cassa</th>
+                        <td colspan="4">@Model.LPosWorkstationNmbr</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Numero transazione</th>
+                        <td colspan="4">@Model.LPosTaNmbr</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            Importo lordo transazione
+                        </th>
+                        @if (Model.LPosReceivedTransactionCounter > 1)
+                        {
+
+                            <td colspan="4">@Html.DisplayFor(m => m.DPosTransactionTurnover) (Registrata più volte) </td>
+
+                        }
+                        else
+                        {
+                            <td colspan="4">@Html.DisplayFor(m => m.DPosTransactionTurnover)</td>
+
+                        }
+                    </tr>
+                    <tr>
+                        <th colspan="2">Transazione con differenze</th>
+                        <td colspan="4">
+                            @if (Model.TransactionHasMismatch)
+                            {
+                                <i class="fa fa-circle" style="color:#ff0101;">&nbsp;<label class="">@Model.LTransactionMismatch.SzDescription</label></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle" style="color:#33cc33;"></i>
+                            }
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th colspan="2">
+                            Verificata
+                        </th>
+                        <td colspan="4">
+                            <label class="switchflagActiveInactive">
+
+                                @*@if (Model.TransactionNonConformOrHasMismatch && Model.BTransactionCheckedFlag != true)*@
+                                @if (!(Model.BTransactionCheckedFlag ?? false))
+                                {
+                                    if (User.IsInRole("OperatorAdmin") || User.IsInRole("OperatorIT"))
+                                    {
+                                        <input class="iFlagActiveInactive" name="bTransactionCheckedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionCheckedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" />
+                                    }
+                                    else
+                                    {
+                                        <input class="iFlagActiveInactive" readonly="readonly" disabled="disabled" name="bTransactionCheckedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionCheckedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" />
+                                    }
+                                }
+                                else
+                                {
+                                    if (/*Model.TransactionNonConformOrHasMismatch &&*/ Model.BTransactionCheckedFlag == true)
+                                    {
+                                        if (User.IsInRole("OperatorAdmin") || User.IsInRole("OperatorIT"))
+                                        {
+                                            <input class="iFlagActiveInactive" name="bTransactionCheckedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionCheckedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input class="iFlagActiveInactive" readonly="readonly" disabled="disabled" name="bTransactionCheckedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionCheckedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" checked="checked" />
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <input class="iFlagActiveInactive" disabled="disabled" readonly="readonly" name="bTransactionCheckedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionCheckedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" checked="checked" />
+                                    }
+                                }
+                                <span class="sliderActiveInactive round ">
+                                </span>
+                            </label>
+                            <label id="resultCheck"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            Archiviata
+
+                        </th>
+                        <td colspan="4">
+                            <label class="switchflagActiveInactive">
+
+
+                                @*@if ((Model.TransactionNonConformOrHasMismatch) &&(Model.BTransactionArchivedFlag != true))*@
+                                @if (!(Model.BTransactionArchivedFlag ?? false))
+                                {
+                                    if (User.IsInRole("Archive") || User.IsInRole("OperatorIT"))
+                                    {
+                                        <input class="iFlagActiveInactive" name="bTransactionArchivedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionArchivedFlag" type="checkbox" onChange="editIsArchivedFlag(this)" />
+
+                                    }
+                                    else
+                                    {
+                                        <input class="iFlagActiveInactive" readonly="readonly" disabled="disabled" name="bTransactionArchivedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionArchivedFlag" type="checkbox" onChange="editIsArchivedFlag(this)" />
+
+                                    }
+                                }
+                                else
+                                {
+                                    if (/*Model.TransactionNonConformOrHasMismatch && */Model.BTransactionArchivedFlag == true)
+                                    {
+                                        if (User.IsInRole("Archive") || User.IsInRole("OperatorIT"))
+                                        {
+                                            <input class="iFlagActiveInactive" name="bTransactionArchivedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionArchivedFlag" type="checkbox" onChange="editIsArchivedFlag(this)" checked="checked" />
+
+                                        }
+                                        else
+                                        {
+                                            <input class="iFlagActiveInactive" readonly disabled name="bTransactionArchivedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionArchivedFlag" type="checkbox" onChange="editIsArchivedFlag(this)" checked="checked" />
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <input class="iFlagActiveInactive" disabled="disabled" readonly="readonly" name="bTransactionArchivedFlag" id="@Model.SzRtDocumentId" value="@Model.BTransactionArchivedFlag" type="checkbox" onChange="editIsCheckedFlag(this)" checked="checked" />
+
+                                    }
+
+
+                                }
+                                <span class="sliderActiveInactive round "></span>
+                            </label>
+                            <label id="resultArchive"></label>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <table class="table  table-bordered tableDetail">
+                <thead>
+                    <tr>
+                        <th colspan="2"> Informazioni RT </th>
+                        <th colspan="4">Valore</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th colspan="2">Numero cassa</th>
+                        <td colspan="4">@Model.SzRtDeviceId</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Numero transazione</th>
+                        <td colspan="4">@Model.DocumentRT</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Importo lordo transazione</th>
+                        @if (Model.LRtReceivedTransactionCounter > 1)
+                        {
+                            <td colspan="4">@Html.DisplayFor(m => m.DRtTransactionTurnover) (Registrata più volte)</td>
+                        }
+                        else
+                        {
+                            <td colspan="4">@Html.DisplayFor(m => m.DRtTransactionTurnover)</td>
+                        }
+                    </tr>
+                    <tr>
+                        <th colspan="2">Numero documento (CCDC)</th>
+                        <td colspan="4">
+                            @Model.SzRtDocumentId
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">ID Operazione </th>
+                        <td colspan="4">
+                            @if (Model.LRtServerOperationId != 0)
+                            {@Html.DisplayFor(m => m.LRtServerOperationId)}
+                        else
+                        {
+
+                        }
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Conformità</th>
+                        <td colspan="4">
+                            @*Questa riga aggiunta 16122020 per vedere la led di conformita rosso quando è
+                                BRtNonCompliantFlag=true e
+                                (
+                                    errorNonCompliant=true(cioe ci sono errori per questa trn)
+                                    oppure
+                                    TransactionHasMismatch=true
+                                 è collgata con la riga
+
+                                )*@
+                            @*@if (Model.BRtNonCompliantFlag == true && ( Model.errorNonCompliant == true || Model.TransactionHasMismatch==true))*@
+                            @if (Model.BRtNonCompliantFlag == true || Model.errorNonCompliant == true)
+                            {
+                                <i class="fa fa-circle" style="color:#ff0101;"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle" style="color:#33cc33;"></i>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Segnalazioni tecniche</th>
+                        <td colspan="4">
+                            @if (Model.RtServer.TransactionRtError.Any(x => x.LRtDocumentNmbr == Model.LRtDocumentNmbr && x.SzRtDeviceId == Model.SzRtDeviceId))
+                            {
+                                @Html.ActionLink("Clicca qui per vedere", "Index", "TransactionErrors",
+                                                    routeValues: new
+                                                         {
+                                                             IdDocument = @Model.LRtDocumentNmbr,
+                                                                        RtServerId = @Model.SzRtServerId,
+                                                                        RetailStoreId = @Model.LRetailStoreId,
+                                                                        StoreGroupId = @Model.LStoreGroupId,
+                                                                        DeviceId = Model.SzRtDeviceId
+                                                         })
+                            }
+                            else
+                            {
+                                @Html.Display("Non ci sono errori")
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table  table-bordered tableDetail">
+                <thead>
+                    <tr>
+                        <th colspan="6">
+                            Note verifica
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="6" rowspan="2">
+                            <div>
+                                <label style="display:block;white-space:pre;" id="descriptionNote">@Model.SzTranscationCheckNote</label>
+                            </div>
+                            <div style="text-align:right;">
+                                @if (!User.IsInRole("Control"))
+                                {
+                                    <a id="noteCheckBtn" class="btn btn-manage" data-toggle="modal" data-target="#checkNote">Modifica</a>
+
+                                }
+                                else
+                                {
+                                    <a id="noteCheckBtn" class="btn btn-manage" disabled="disabled" readonly="readonly" data-toggle="modal" data-target="#checkNote">Modifica</a>
+
+                                }
+
+                                @*@if (Model.UserActivityLogViewModel.Count >= 0 && Model.UserActivityLogViewModel != null)
+                                    {
+                                        <button class="btn btn-manage" id="logModalBtn" data-toggle="modal" data-target="#logModal"><i class="fa fa-history"></i></button>
+
+                                    }
+                                    else
+                                    {*@
+                                <button type="button" class="btn btn-manage" id="logModalBtn" data-toggle="modal" data-target="#logModal"><i class="fa fa-history"></i></button>
+                                @*}*@
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <table class="table  table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">Documenti</th>
+                        <th colspan="3">Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="2">
+                            Transazione cassa TP
+                        </th>
+                        <td colspan="3" style="text-align:center;">
+                            <button type="button" class="btn btn-manage btnDoc" onclick="showModalDocument(this)" id="tpDoc" data-toggle="modal" data-target="#documentModal">Documento TP</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            Documento commerciale RT
+                        </th>
+                        <td colspan="3" style="text-align:center;">
+                            <button type="button" class="btn btn-manage btnDoc" onclick="showModalDocument(this)" id="rtDoc" data-toggle="modal" data-target="#documentModal">Documento RT</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @foreach (var trnVat in Model.TransactionVat)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered tableDetail tableIva">
+                    <thead>
+                        <tr>
+                            <th>Aliquota @Html.DisplayFor(t => trnVat.DRtVatRate)</th>
+                            <th>Lordo</th>
+                            <th>Imponibile</th>
+                            <th>Imposta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th> TP </th>
+                            <td>@Html.DisplayFor(t => trnVat.DPosGrossAmount) </td>
+                            <td>@Html.DisplayFor(t => trnVat.DPosNetAmount)</td>
+                            <td>@Html.DisplayFor(t => trnVat.DPosVatAmount)</td>
+                        </tr>
+                        <tr>
+                            <th> RT </th>
+                            <td>@Html.DisplayFor(t => trnVat.DRtGrossAmount) </td>
+                            <td>@Html.DisplayFor(t => trnVat.DRtNetAmount)</td>
+                            <td>@Html.DisplayFor(t => trnVat.DRtVatAmount)</td>
+                        </tr>
+                        <tr id="hasmismatch">
+                            <th>Differenza</th>
+                            <td>@Html.DisplayFor(t => trnVat.DMismatchGrossAmount)</td>
+                            <td>@Html.DisplayFor(t => trnVat.DMismatchNetAmount)</td>
+                            <td>@Html.DisplayFor(t => trnVat.DMismatchVatAmount)</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    @*Modals *@
+    <div class="modal fade" id="checkNote" tabindex="-1" role="dialog" aria-labelledby="NoteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header header-modal" style="display:block;">
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align:left;">
+                            <h5 class="title-modal titlePage" id="exampleModalLabel">Note Verifica</h5>
+                        </div>
+                        <div class="col-sm-6" style="text-align:right;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="checkedNote" class="col-form-label"></label>
+                        <textarea class="form-control" id="checkedNoteInput" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-manage" id="saveCheckNote">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="DocumentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width:650px;">
+            <div class="modal-content">
+                <div class="modal-header header-modal">
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align:left;">
+                            <h5 class="title-modal titlePage" id="documentModalLabel"></h5>
+                        </div>
+                        <div class="col-sm-6" style="text-align:right;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div id="documentBodyTP" style="display:none;">
+                            <div class="form-control" id="textAreaDocTP" style="white-space: pre-wrap;overflow-y:scroll;font-family:monospace;height:400px;">
+
+                                @Model.TransactionDocument.Where(x => x.LDocumentTypeId != 2).Select(x => x.DocumentAttachmentByteToString).FirstOrDefault()
+                            </div>
+                        </div>
+                        <div id="documentBodyRT" style="display:none;">
+                            <div class="form-control" id="textAreaDocRT" style="white-space: pre-wrap;overflow-y:scroll;font-family:monospace;height:400px;">
+                                @Model.TransactionDocument.Where(x => x.LDocumentTypeId == 2).Select(x => x.StringFromXmlDocument).FirstOrDefault()
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="DocumentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="min-width:650px;">
+            <div class="modal-content">
+                <div class="modal-header header-modal" style="display:block;">
+                    <div class="row">
+                        <div class="col-sm-6" style="text-align:left;">
+                            <h5 class="title-modal titlePage" id="logModalLabel">Attività Utenti</h5>
+                        </div>
+                        <div class="col-sm-6" style="text-align:right;">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div id="documentBodyLog">
+                            <div id="textLog" style="overflow-y:scroll;height:400px;">
+                                <div class="timeline" id="textUserLog">
+                                    @foreach (var log in Model.UserActivityLogViewModel)
+                                    {
+                                        <div class="containerTimeline left">
+                                            <div class="contentTimeline">
+                                                <p><b>@log.DUserActivityDateTime</b></p>
+                                                <p>@log.ToStringGlobal()</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

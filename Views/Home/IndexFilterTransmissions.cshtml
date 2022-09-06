@@ -1,0 +1,248 @@
+﻿@model IEnumerable<DnSrtChecker.ModelsHelper.ListServersStatusHomeBYDayViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container">
+    <div class="">
+        <h2 class="titlePage">Lista dei Server RT</h2>
+        <hr />
+    </div>
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading subtitle" style="text-align:center;">
+                <h4>Filtri</h4>
+            </div>
+            <form id="filtersForm" name="filtersForm" asp-page="/Index" method="get">
+                <div class="panel-body panel-table">
+                    <table class="filtersTable ">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="storeGroup" name="storeGroup" placeholder="Insegna" class="form-control form-text " value="@(ViewBag.storeGroup ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input type="text" id="store" name="store" placeholder="Punto vendita" class="form-control form-text" value="@(ViewBag.store ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input type="text" id="serverRt" name="serverRt" placeholder="Server RT" class="form-control form-text" value="@(ViewBag.serverRt ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <div class="input-group datepicker " style="display:inline-table;">
+                                        <input type="text" class="form-control " placeholder="Da Data" id="transmissionDateFrom" name="transmissionDateFrom" value="@(ViewBag.transmissionDateFrom ?? String.Empty)" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="float:left;">
+                                    <button type="submit" class="btn btn-manage" id="btnFilter">
+                                        <i class="fa fa-search "></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("status", null, new { @class = "form-control form-text " })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("error", null, new { @class = "form-control  form-text " })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("nonCompliant", null, new { @class = "form-control form-text" })
+                                </td>
+                                <td>
+                                    <div class="input-group datepicker " style="display:inline-table;">
+                                        <input type="text" class="form-control " placeholder="A Data" id="transmissionDateTo" name="transmissionDateTo" value="@(ViewBag.transmissionDateTo ?? String.Empty)" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="float:right;">
+                                    <button asp-action="GetListRtServersNoFilters" class="btn btn-manage">
+                                        <i class="fa fa-eraser"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="">
+        @foreach (var item in Model)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-2"> <label class="control-label">Giorno:</label></div>
+                        <div class="col-sm-3 label-content-panel ">@Html.DisplayFor(it => item.OperationClosureDatetime)</div>
+                    </div>
+                    <div class="row clickableHome" id="@Html.DisplayFor(it=>item.OperationClosureDatetime)">
+                        <div class="col-sm-12" style="text-align:center">
+                            @*onclick="getTrxDay('@item.SzRtServerId','@item.OperationClosureDatetime.Value.Date.ToShortDateString()')">*@
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <div class="col-sm-12 hidden spinnerHome" style="text-align:center">
+                            <i class="fa fa-spinner fa-spin fa-3x " id="waiting_9" style="position: relative;"></i>
+                        </div>
+                        @*<div class="col-sm-5"> </div>
+        <div class="col-sm-2">
+            <span><i class="fa fa-chevron-down"></i></span>
+        </div>
+        <div class="col-sm-5"></div>*@
+                    </div>
+                    <div class="row">
+                    </div>
+                </div>
+                    <div class="panel-body panel-table bodyCollapseHome" style="display:none;">
+                        <table id="homeRecap" class="table  table-bordered tableTr homeRecap" style="table-layout:fixed">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Insegna</th>
+                                    <th rowspan="2">Punto vendita</th>
+                                    <th rowspan="2">Server</th>
+                                    <th rowspan="2">Stato</th>
+                                    <th rowspan="2">Controllo Errori</th>
+                                    <th rowspan="2">Transazioni</th>
+                                    <th rowspan="2">Ultima chiusura</th>
+                                    <th colspan="2">Totale Negozio</th>
+                                    <th rowspan="2">Totale AdE</th>
+                                    <th rowspan="2">Trasmissioni</th>
+                                </tr>
+                                <tr><th>Totale TP</th><th>Totale RT</th></tr>
+                            </thead>
+                            <tbody class="">
+                                @foreach (var srv in item.ListRtServersHome)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.L.LStoreGroup.SzDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.L.StoreNameComplet)
+                                    </td>
+                                    <td>
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="@(srv.RtServerStatus.SzLastCloseResult)">
+                                            @Html.DisplayFor(modelItem => srv.SzRtServerId)
+                                        </span>
+                                    </td>
+                                    @if (User.IsInRole("OperatorIT"))
+                                    {
+                                        <td onclick="window.location.href = '@Url.Action("Details","RtServers", new { id = srv.SzRtServerId,retailStoreId=srv.LRetailStoreId,storeGroupId=srv.LStoreGroupId })'">
+                                            <input type="hidden" value="@(srv.BOnDutyFlag??false)" />
+                                            @if (srv.BOnDutyFlag ?? false)
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <input type="hidden" value="@(srv.BOnDutyFlag??false)" />
+                                            @if (srv.BOnDutyFlag ?? false)
+                                            {
+                                                <div><i class="fa fa-circle" style="color:#33cc33"></i></div>
+                                            }
+                                            else
+                                            {
+                                                <div><i class="fa fa-circle" style="color:#ff0101"></i></div>
+                                            }
+                                        </td>
+                                    }
+
+                                    <td style="text-align:center;">
+                                        <input type="hidden" value="@(srv.BOnError??false)" />
+
+                                        @if (srv.BOnDutyFlag.HasValue && srv.BOnDutyFlag.Value)
+                                        {
+                                            @if (srv.BOnError != null && (srv.BOnError ?? false))
+                                            {
+                                                <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-circle" style="color:#808080; "></i>
+                                        }
+                                    </td>
+                                    <td onclick="window.location.href ='@Url.Action("Index","Transactions", new { id = srv.SzRtServerId,retailStoreId=srv.LRetailStoreId,storeGroupId=srv.LStoreGroupId })'">
+                                        <input type="hidden" value="@srv.NonCompliantOrHasMismatch.ToLower()" />
+                                        <input type="hidden" value="@(srv.NonCompliantOrHasMismatch.ToLower().Contains("true")?"false":"true")" />
+                                        @if (srv.BOnDutyFlag.HasValue && srv.BOnDutyFlag.Value)
+                                        {
+                                            if (srv.NonCompliant.HasValue && srv.NonCompliant.Value)
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-circle" style="color:#808080;"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.DateLastClosure)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.TotalTP)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.TotalRT)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => srv.TotalADE)
+                                    </td>
+
+                                    @if (srv.DateLastClosure != null)
+                                    {
+                                        @*<td onclick="window.location.href ='@Url.Action("Index", "Transmissions", new { id = srv.SzRtServerId,storeId=srv.LRetailStoreId*@
+                                        <td onclick="window.location.href ='@Url.Action("Index", "Transmissions", new { id = srv.SzRtServerId,storeId=srv.LRetailStoreId,storeGroupId=srv.LStoreGroupId,date=String.Format("{0:dd-MM-yyyy}",srv.DateLastClosure)
+                                                                                                                                    })'">
+                                            @if (srv.TrasnmissionError)
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <i class="fa fa-circle" style="color:#33cc33"></i>
+                                        </td>
+                                    }
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                
+                
+            </div>
+
+        }
+    </div>
+</div>

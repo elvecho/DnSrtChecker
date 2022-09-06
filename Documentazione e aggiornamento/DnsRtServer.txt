@@ -1,0 +1,58 @@
+﻿DnsRtServer
+
+Oggetto : Aggiornamento e Guida pubblicazione
+Configurazione :
+Controllare
+1. HomeNmbrDays : 3 : 
+Indica che i trasmissioni iniziali richieste per l’home page hanno la data compresa tra ieri e 3 giorni fa .
+2.  "DefaultConnection": "server=192.168.100.19; database=RT_Checks; user id=RT_USER; password=*******; Max Pool Size=50000;Pooling=True;"
+Credenziali e server del data base 
+3. "path": "C:\\temp\\Logs\\Publisher.log" 
+Percorso del file di log
+
+
+
+
+Database
+* E’ stata Aggiunta la tabella UserAffiliation che lega ogni user con i server che può visualizzare 
+
+
+* Store Procedure nuovi Usati :
+1- TotalNegozio_Trasmissioni_BYDATE
+2- Dettagli_Transazioni
+
+
+           Installazione :
+                    Sul disco locale C dov’è viene aggiunto il sito :
+                    1- Creare un folder Retex  con due folder dentro Loader e Publisher.
+                    2-  Per ogni folder creare un folder bin e uno config
+                    3- Bin conterrà tutti i package necessarie , le dll e exe per il progetto                       corrispondente e il folder template che dovrebbe contenere il formato in cui verrà visualizzato il documentoRT
+                    4- Config  conterrà il file appsettings.json del suo progetto
+                    5- Aggiugere dnsRtChecker alla lista dei siti in IIS compilando la seguente finestra.
+  
+
+                    
+
+
+6- Aggiungere Loader ai servizi Windows
+In prompt comand , aperto come administrator  , apri il folder loader e lancia il comando seguente :
+sc create "Retex Loader" binpath= "C:\Retex\Loader\bin\Loader.exe"
+
+
+
+
+
+
+
+
+Aggiornamento
+DnsRtChecker : In IIS , in sites clicca col destro sul nome del sito e clicca explore, incolla tutti i file del folder frutto della pubblicazione del progetto aggiornato sostituendo i vecchi file,  Se il template del documento Rt è stato aggiornato  allora va SOSTITUITO anche il DocumentAttachement.cshtml in C:\Retex\Publisher\bin\Templates
+
+
+
+
+Disinstallazione
+1- Disinstalla Retex Loader Lanciando in prompt comand con diritti di amministratore questo comando sc.exe delete "Retex Loader"
+2- Elimina dnsRtChecker dalla lista dei siti IIS
+3- Elimina Il folder retex  in C:\Retex\
+4- Elimina il folder Logs da C:\temp\

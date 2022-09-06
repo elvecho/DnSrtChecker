@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DnSrtChecker</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/FontsRetex.css" />
+        <link rel="stylesheet" href="~/css/toggleCB.css" />
+        <link rel="stylesheet" href="~/css/Transactions.css" />
+        <link rel="stylesheet" href="~/css/Transmissions.css" />
+        <link rel="stylesheet" href="~/css/Tables.css" />
+        <link rel="stylesheet" href="~/css/Icons.css" />
+        <link rel="stylesheet" href="~/font/Icons/Icons.css" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    </environment>
+
+    <environment exclude="Development">
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/FontsRetex.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/Transactions.css" />
+        <link rel="stylesheet" href="~/css/Transmissions.css" />
+        <link rel="stylesheet" href="~/css/Tables.css" />
+        <link rel="stylesheet" href="~/css/Icons.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+
+    </environment>
+    <environment include="Production">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/FontsRetex.css" />
+        <link rel="stylesheet" href="~/css/toggleCB.css" />
+        <link rel="stylesheet" href="~/css/Transactions.css" />
+        <link rel="stylesheet" href="~/css/Transmissions.css" />
+        <link rel="stylesheet" href="~/css/Tables.css" />
+        <link rel="stylesheet" href="~/css/Icons.css" />
+        <link rel="stylesheet" href="~/font/Icons/Icons.css" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    </environment>
+    @*<environment exclude="Production">
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/FontsRetex.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/Transactions.css" />
+        <link rel="stylesheet" href="~/css/Tables.css" />
+        <link rel="stylesheet" href="~/css/Icons.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+
+    </environment>*@
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="navbar-header">
+                    @*<a asp-action="Index" asp-controller="Home"><img src="~/images/Logo/CMYK_Logo_Retex_2020.png" class="navbar-brand" /></a>*@
+                    <img src="~/images/Logo/Logo.jpg" class="navbar-brand navbar-btn" />
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                <ul class="nav navbar-nav ">
+                    <li>
+                        <a class="btn btn-link navbar-btn navbar-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home fa-2x iconColorRetex " style="color:grey"></i></a>
+                    </li>
+                    @if (User.IsInRole("OperatorIT"))
+                        {
+                    <li class="dropdown">
+                        <a href="javascript:void(0)" class="dropbtn navbar-btn"><i class="fa fa-tools fa-2x iconColorRetex " style="color:grey"></i></a>
+                        <div class="dropdown-content" id="ManutBar">
+                            <a asp-area="" asp-controller="RtServers" asp-action="Index" style="font-family:Raleway">Server RT</a>
+                            <a asp-area="" asp-controller="Stores" asp-action="Index" style="font-family:Raleway">Punti vendita</a>
+                            <a asp-area="" asp-controller="StoreGroups" asp-action="Index" style="font-family:Raleway">Insegne</a>
+
+                        </div>
+                    </li>
+                        }
+                </ul>
+                <ul class="nav navbar-nav navbar-right navbar-btn">
+                    <partial name="_LoginPartial" />
+                </ul>
+                }
+            </div>
+        </div>
+    </nav>
+
+    @*<partial name="_CookieConsentPartial" />*@
+
+    <div class="body-content">
+        @RenderBody()
+
+    </div>
+    <nav class="navbar navbar-fixed-bottom ">
+        <div class="container text-center">
+            <footer>
+                <p>&copy; @DateTime.Now.Year - DnSrtChecker</p>
+            </footer>
+        </div>
+    </nav>
+
+    <environment include="Development">
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/toggleCB.js"></script>
+        <script src="~/js/CreateStore.js"></script>
+        <script src="~/js/FilterList.js"></script>
+        <script src="~/js/Transactions.js"></script>
+        <script src="~/js/Transmission.js"></script>
+        <script src="~/js/Home.js"></script>
+
+
+    </environment>
+    <environment include="Production">
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/toggleCB.js"></script>
+        <script src="~/js/CreateStore.js"></script>
+        <script src="~/js/FilterList.js"></script>
+        <script src="~/js/Transactions.js"></script>
+        <script src="~/js/Transmission.js"></script>
+        <script src="~/js/Home.js"></script>
+
+
+    </environment>
+    <environment exclude="Development">
+
+        @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.4.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossOrigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>*@
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+
+
+        <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+        @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>*@
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM">
+
+        </script>
+
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/toggleCB.js"></script>
+        <script src="~/js/CreateStore.js"></script>
+        <script src="~/js/FilterList.js"></script>
+        <script src="~/js/Transactions.js"></script>
+        <script src="~/js/Transmission.js"></script>
+        <script src="~/js/Home.js"></script>
+
+    </environment>
+   
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

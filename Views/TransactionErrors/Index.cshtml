@@ -1,0 +1,48 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.TransactionRtErrorViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="container">
+        <div class="">
+            <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+            <h2 class="titlePage">Segnalazioni Tecniche</h2>
+            <hr />
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-2"> <label class="control-label">Server RT:</label></div>
+                    <div class="col-sm-2 label-content-panel ">@Model.FirstOrDefault().SzRtServerId</div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-2"> <label class="control-label">Transazione N°:</label></div>
+                    <div class="col-sm-2 label-content-panel ">@Model.FirstOrDefault().LRtDocumentNmbr</div>
+                </div>
+            </div>
+            <div class="row">
+            </div>
+            <div class="panel-body panel-table">
+                <table class="table  table-bordered tableTr">
+                    <thead>
+                        <tr>
+                            <th>Punto Cassa</th>
+                            <th>Data e ora della transazione</th>
+                            <th>Descrizione dell'errore</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var srv in Model)
+                        {
+                            <tr>
+                                <td>@srv.SzRtDeviceId</td>
+                                <td>@Html.DisplayFor(t=>srv.DRtDateTime)</td>
+                                <td>@srv.SzDescription</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

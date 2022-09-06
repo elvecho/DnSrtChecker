@@ -1,0 +1,141 @@
+﻿.borderLess tr, .borderLess td {
+    border: none !important;
+}
+
+/*Toggle button Transaction/Detail*/
+
+.switchflagActiveInactive {
+    position: relative;
+    display: inline-block;
+    width: 31px;
+    height: 20px;
+    margin-bottom:0;
+}
+
+.switchflagActiveInactive input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+}
+
+.sliderActiveInactive {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: red;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.sliderActiveInactive:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+}
+
+input:checked + .sliderActiveInactive {
+    background-color: #2EB085;
+}
+
+input:focus + .sliderActiveInactive {
+    box-shadow: 0 0 1px #2EB085;
+}
+
+input:checked + .sliderActiveInactive:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.sliderActiveInactive.round {
+    border-radius: 17px;
+}
+
+.sliderActiveInactive.round:before {
+     border-radius: 50%;
+}
+
+div.panel-body.panel-table {
+    padding: 0 0 0 0;
+    margin-bottom:10px;
+}
+.tableTr{
+    margin-bottom:0 ;
+}
+.tableTr td, .tableTr th{
+    text-align:center;
+}
+.form-text {
+    display:inline;
+    /*width: 200px;*/
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.filtersTable td {
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+.filtersTable  {
+   /* margin-right:10%;*/
+    /*margin-left:10%;*/
+}
+.filtersTable tr {
+        padding-bottom: 10px;
+        padding-top: 10px;
+}
+
+.filtersTableHome {
+    margin-right: 10%;
+    /*margin-left: 15%;*/
+}
+.datepicker {
+    width: 200px;
+    padding:4px 0px 4px 0px;
+}
+.header-modal {
+    background-color: #093857;
+    padding:15px 15px 15px 15px;
+    display:block;
+}
+.modal-title {
+    color: #F7F7F7;
+    padding-bottom:0;
+}
+.form-control[readonly]{
+    background-color:white !important;
+}
+.close{
+    color:white;
+    opacity:1;
+
+}
+
+.modal-header .close{
+    margin-top:0px;
+}
+.label-successColor {
+    color: green;
+}
+.label-dangerColor{
+    color:red;
+}
+.btnDoc{
+    width:70%
+}
+
+.title-modal{
+    color:white;
+
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.StoreGroupViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-7">
+            <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+            <h2 class="titlePage">Manutenzione delle insegne</h2>
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-7">
+            <p>
+                <a asp-action="Create" class="btn btn-manage"><i class="fa fa-plus"></i>&nbsp;Insegna</a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-7">
+            <table class="table  table-bordered tableManut">
+                <thead>
+                    <tr>
+                        <th colspan="1">
+                            @Html.DisplayName("Codice")
+                        </th>
+                        <th colspan="6">
+                            @Html.DisplayName("Descrizione")
+                        </th>
+                        <th colspan="1" style="text-align:center;">
+                            @Html.DisplayName("Gestione")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td colspan="1">
+                            @Html.DisplayFor(modelItem => item.LStoreGroupId)
+                        </td>
+                        <td colspan="6">
+                            @Html.DisplayFor(modelItem => item.SzDescription)
+                        </td>
+                        <td colspan="1" class="elementCentered">
+                            <a asp-action="Edit" asp-route-id="@item.LStoreGroupId"><i class="fa fa-edit iconColorRetex"></i></a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.LStoreGroupId"><i class="fa fa-trash iconRetexBlue"></i></a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

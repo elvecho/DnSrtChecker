@@ -1,0 +1,128 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.RtServersHomeViewModel>
+
+@if (Model.Count() > 0)
+{
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.L.LStoreGroup.SzDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.L.StoreNameComplet)
+        </td>
+        <td>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="@item.RtServerStatus.SzLastCloseResult">
+                @Html.DisplayFor(modelItem => item.SzRtServerId)
+            </span>
+        </td>
+        @if (User.IsInRole("OperatorIT"))
+        {
+            <td onclick="window.location.href = '@Url.Action("Details","RtServers", new { id = item.SzRtServerId,retailStoreId=item.LRetailStoreId,storeGroupId=item.LStoreGroupId })'">
+                <input type="hidden" value="@(item.BOnDutyFlag??false)" />
+                @if (item.BOnDutyFlag ?? false)
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                }
+                else
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                }
+            </td>
+        }
+        else
+        {
+            <td>
+                <input type="hidden" value="@(item.BOnDutyFlag??false)" />
+                @if (item.BOnDutyFlag ?? false)
+                {
+                    <div><i class="fa fa-circle" style="color:#33cc33"></i></div>
+                }
+                else
+                {
+                    <div><i class="fa fa-circle" style="color:#ff0101"></i></div>
+                }
+            </td>
+        }
+
+        <td style="text-align:center;">
+            <input type="hidden" value="@(item.BOnError??false)" />
+
+            @if (item.BOnDutyFlag.HasValue && item.BOnDutyFlag.Value)
+            {
+                @if (item.BOnError != null && (item.BOnError ?? false))
+                {
+                    <i class="fa fa-circle" style="color:#ff0101; "></i>
+                }
+                else
+                {
+                    <i class="fa fa-circle" style="color:#33cc33; "></i>
+                }
+            }
+            else
+            {
+                <i class="fa fa-circle" style="color:#808080; "></i>
+            }
+        </td>
+        <td onclick="window.location.href ='@Url.Action("Index","Transactions", new { id = item.SzRtServerId,retailStoreId=item.LRetailStoreId,storeGroupId=item.LStoreGroupId })'">
+            <input type="hidden" value="@item.NonCompliantOrHasMismatch.ToLower()" />
+            <input type="hidden" value="@(item.NonCompliantOrHasMismatch.ToLower().Contains("true")?"false":"true")" />
+            @if (item.BOnDutyFlag.HasValue && item.BOnDutyFlag.Value)
+            {
+                if (item.NonCompliant.HasValue && item.NonCompliant.Value)
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+
+                }
+                else
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+
+                }
+            }
+            else
+            {
+                <i class="fa fa-circle" style="color:#808080;"></i>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateLastClosure)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalTP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalRT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalADE)
+        </td>
+
+        @if (item.DateLastClosure != null)
+        {
+            <td onclick="window.location.href ='@Url.Action("InitialList", "Transmissions", new { id = item.SzRtServerId,storeId=item.LRetailStoreId,storeGroupId=item.LStoreGroupId })'">
+                @if (item.TrasnmissionError)
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                }
+                else
+                {
+                    <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                }
+            </td>
+        }
+        else
+        {
+            <td>
+                <i class="fa fa-circle" style="color:#33cc33"></i>
+            </td>
+        }
+    </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="10">Nessun Risoltato</td>
+    </tr>
+}

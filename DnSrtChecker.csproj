@@ -1,0 +1,142 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-DnSrtChecker-4DBFDBFC-3807-4B74-94ED-82674D24AE72</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Identity\Services\**" />
+    <Content Remove="Areas\Identity\Services\**" />
+    <EmbeddedResource Remove="Areas\Identity\Services\**" />
+    <None Remove="Areas\Identity\Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\_TransactionsController - Copy.cs" />
+    <Compile Remove="Migrations\20200127154920_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127154920_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127165824_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127165824_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127165943_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127165943_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127170220_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127170220_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127170629_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127170629_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127170812_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127170812_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127171002_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127171002_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127171152_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127171152_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127171721_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127171721_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127172021_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127172021_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127172746_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127172746_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127173140_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127173140_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127173456_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127173456_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127173603_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127173603_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127173847_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127173847_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200127174227_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200127174227_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128084428_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128084428_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128084734_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128084734_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128085356_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128085356_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128085543_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128085543_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128085912_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128085912_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128090011_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128090011_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128090203_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128090203_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128090436_Init27012020v1.cs" />
+    <Compile Remove="Migrations\20200128090436_Init27012020v1.Designer.cs" />
+    <Compile Remove="Migrations\20200128164539_Initial28012020v2.cs" />
+    <Compile Remove="Migrations\20200128164539_Initial28012020v2.Designer.cs" />
+    <Compile Remove="Migrations\20200205143710_Init05022020.cs" />
+    <Compile Remove="Migrations\20200205143710_Init05022020.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="App.Metrics.AspNetCore.Abstractions" Version="3.1.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="bootstrap" Version="4.3.1" />
+    <PackageReference Include="Bootstrap.Datepicker" Version="1.8.0.1" />
+    <PackageReference Include="DynamicExpresso.Core" Version="2.3.1" />
+    <PackageReference Include="EcmaScript.Net" Version="2.0.0" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="FontAwesome" Version="4.7.0" />
+    <PackageReference Include="jQuery" Version="3.4.1" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+    <PackageReference Include="jQuery.Validation" Version="1.19.1" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.4.0" />
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="3.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="popper.js" Version="1.16.1" />
+    <PackageReference Include="RazorEngineCore" Version="2020.3.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Documentazione e aggiornamento\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DnSrtChecker.sln" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/band-manifest.json" /></VisualStudio></ProjectExtensions>
+</Project>

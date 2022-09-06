@@ -1,0 +1,9 @@
+-- Facendo delle modifiche su Template.DocumentAttachment.cshtml bisogna 
+aggiornarlo quando si pubblica non basta fare la publicazione standard, purtroppo
+non viene caricato Template, aggiungere il folder template aggiornato al folder
+publish aggiornato.
+
+================================================================
+Verifica i percorsi prima della compilazione del progetto, c'è
+stato un problema simile nel loader
+================================================================

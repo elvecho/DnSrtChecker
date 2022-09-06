@@ -1,0 +1,41 @@
+﻿===============================================================
+Identificativo   : 1 
+Server Telematico:   DIEBOLD NIXDORF SRT-ONE
+Matricola:           88S25000897
+Punto Cassa:         01250008 
+
+@string.Concat("===============================================================", "")
+Documento Commerciale di Reso
+---------------------------------------------------------------
+Azzeramento n: 0460 @Model.Receipt.ZNumber
+Documento n:         0017 @Model.Receipt.DocumentNumber
+Data: 31 / 03 / 2020 @Model.Receipt.Date
+Ora: 09:16 @Model.Receipt.Time
+CCDC: CB425BFD548CB2FBF432D24F0A5AFA51 @Model.CCDC
+-------------------------------------------------------------- -
+Documento di riferimento
+---------------------------------------------------------------
+Data e Ora        Punto Cassa  Progressivo
+26 / 03 / 2020 15:45  01250008     0457 - 0110
+===============================================================
+
+Quantità Descrizione Prezzo / tipo  IVA % Importo(€)
+-------------------------------------- - ----------------
+@foreach (var rd in Model.Receipt.ReceiptDetails)
+{
+    if (rd.ItemSale != null)
+    {
+        @rd.ItemSale.Quantity      @rd.ItemSale.Description      @rd.ItemSale.VatCode.Rate      @rd.ItemSale.Price
+
+    }
+    if (rd.ItemModifier != null)
+    {
+        Sconto                              @rd.ItemModifier.VatCode.Rate @rd.ItemModifier.Sign @rd.ItemModifier.Amount
+    }
+
+
+    -------------------------------------------------------------- -
+    Totale Euro                                                @Model.Receipt.Turnover
+    Di cui IVA: 4,00         0,08
+    ===============================================================
+}

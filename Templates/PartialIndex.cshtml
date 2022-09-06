@@ -1,0 +1,362 @@
+﻿@*@model IEnumerable< DnSrtChecker.ModelsHelper.TransmissionsByDayToIndexView>
+
+    @{
+        ViewData["Title"] = "Index";
+    }*@
+
+@*@foreach (var v in Model)
+    {
+        foreach(var c in v.TransmissionsGroupedByDay)
+        {
+
+        <div class="row divider">&nbsp;</div>
+        <table class="table table-bordered tableTr transmissionTable">
+            <thead>
+                <tr>
+                    <th colspan="1">Cassa N°:</th>
+                    <td>
+                        @Html.DisplayFor(d => c.SzRtDeviceId)
+                    </td>
+                    <th colspan="2" style="text-align:right;">Trasmissione N°:</th>
+                    <td colspan="1">@Html.DisplayFor(d => c.LRtDeviceTransmissionId)</td>
+                    <th colspan="2" style="text-align:right;">ID Operazione:</th>
+                    <td colspan="1">@Html.DisplayFor(d => c.LRtServerOperationId)</td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th colspan="2">Totale AdE :</th>
+                    <td style="background-color:white">
+                        @Html.DisplayFor(d => c.TotalAmount)
+                    </td>
+                    <td></td>
+                    <th>Totale RT :</th>
+                    <td style="background-color:white">
+                        @if (c.MismatchRtAdE != 0)
+                        {
+                            @Html.DisplayFor(d => c.TotalRtServer) @Html.DisplayFor(d => c.MismatchRtAdE)
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(d => c.TotalRtServer)
+                        }
+                    </td>
+                    <th>Totale TP :</th>
+                    <td style="background-color:white">
+                        @if (c.MismatchTPAdE != 0)
+                        {
+                            @Html.DisplayFor(d => c.TotalTP) @(Html.DisplayFor(d => c.MismatchTPAdE))
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(d => c.TotalTP)
+                        }
+
+                    </td>
+                    @if (c.TotalRtServer != c.TotalAmount || c.TotalTP != c.TotalAmount)
+                    {
+                        <td onclick="window.location.href ='@Url.Action("Filter", "Transactions", new
+                                                                           {
+                                                                               ServerRt = v.SzRtServerId,
+                                                                               Store = v.LRetailStoreId,
+                                                                               StoreGroup = v.StoreGroupId
+                                                                               ,TransactionDateTo=String.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+                                                                               ,TransactionDateFrom=String.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+
+                                                                           })'">
+
+                            <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                        </td>
+                    }
+                    else
+                    {
+                        <td onclick="window.location.href ='@Url.Action("Filter", "Transactions", new  { ServerRt = v.SzRtServerId,Store=v.LRetailStoreId,StoreGroup=v.StoreGroupId
+                                                                                                                           ,TransactionDateTo=String.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+                                                                                                                           ,TransactionDateFrom=String.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+
+                                                                                                                            })'">
+                            <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th style="width: 9%">Aliquota IVA</th>
+                    <th style="width: 8%">Natura</th>
+                    <th style="width: 12%">Vendite</th>
+                    <th style="width: 12%">Annulli</th>
+                    <th style="width: 12%">Resi</th>
+                    <th style="width: 12%">IVA</th>
+                    <th style="width: 15%">Importo AdE</th>
+                    <th style="width: 15%">Importo TP</th>
+                    <th style="width: 5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!c.HasVentilation)
+                {
+                    if (c.TransactionVats != null && c.TransactionVats.Count() > 0)
+                    {
+                        @foreach (var tv in c.TransactionVats)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(r => tv.DVatRate)</td>
+                                <td>@Html.DisplayFor(r => tv.SzVatNature)</td>
+                                <td>@Html.DisplayFor(r => tv.DSaleAmount)</td>
+                                <td>@Html.DisplayFor(r => tv.DReturnAmount)</td>
+                                <td>@Html.DisplayFor(r => tv.DVoidAmount)</td>
+                                <td>@Html.DisplayFor(r => tv.DVatAmount)</td>
+                                <td>@Html.DisplayFor(r => tv.DSumAmount)</td>
+                                <td>@Html.DisplayFor(r => tv.DPosGrossAmount)</td>
+                                <td>
+                                    @if ((tv.DSaleAmount + tv.DVatAmount - tv.DReturnAmount - tv.DVoidAmount) != tv.DPosGrossAmount)
+                                    {
+                                        <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <th colspan="2">Totale</th>
+                            <td>@Html.DisplayFor(x => c.TotalSale)</td>
+                            <td>@Html.DisplayFor(x => c.TotalReturn)</td>
+                            <td>@Html.DisplayFor(x => c.TotalVoid)</td>
+                            <td>@Html.DisplayFor(x => c.TotalVat)</td>
+                            <td>@Html.DisplayFor(x => c.TotalAmount)</td>
+                            <td>@Html.DisplayFor(x => c.TotalTP)</td>
+                            <td>
+                                @if (c.TotalAmount != c.TotalTP)
+
+                                {
+                                    <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row divider">&nbsp;</div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Data/Ora segnalazione</th>
+                    <th>Note Descrittiva dell'errore</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (c.RtServerTransmissionsDetailRtReport != null)
+                {
+                    @foreach (var t in c.RtServerTransmissionsDetailRtReport)
+                    {
+
+                        <tr>
+                            <td>@Html.DisplayFor(x => t.DEventDateTime)</td>
+                            <td>@Html.DisplayFor(x => t.SzEventNote)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        }
+    }*@
+
+
+
+@foreach (var v in Model)
+{
+    foreach (var c in v.TransmissionsGroupedByDay)
+    {
+
+        <div class="row divider">&nbsp;</div>
+        <table class="table table-bordered tableTr transmissionTable">
+            <thead>
+                <tr>
+                    <th colspan="1">Cassa N°:</th>
+                    <td>
+                        @c.SzRtDeviceId
+                    </td>
+                    <th colspan="2" style="text-align:right;">Trasmissione N°:</th>
+                    @*<td colspan="1">@c.LRtDeviceTransmissionId</td>*@
+                    <td colspan="1">@c.LRtDeviceTransmissionIdS</td>
+                    <th colspan="2" style="text-align:right;">ID Operazione:</th>
+                    @*<td colspan="1">@c.LRtServerOperationId</td>*@
+                    <td colspan="1">@c.LRtServerOperationIdS</td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th colspan="2">Totale AdE :</th>
+                    <td style="background-color:white">
+                        @(string.Format("{0:C2}",c.TotalAmount))
+                    </td>
+                    <td></td>
+                    <th>Totale RT :</th>
+                    <td style="background-color:white">
+                        @if (c.MismatchRtAdE != 0)
+                        {
+                            @string.Format("{0:C2} ({1:C2})", c.TotalRtServer, c.MismatchRtAdE)
+                        }
+                        else
+                        {
+                            @(string.Format("{0:C2}",c.TotalRtServer))
+
+                        }
+                    </td>
+                    <th>Totale TP :</th>
+                    <td style="background-color:white">
+                        @if (c.MismatchTPAdE != 0)
+                        {
+                            @string.Format("{0:C2} ({1:C2})", c.TotalTP, c.MismatchTPAdE)
+
+                        }
+                        else
+                        {
+                            @(string.Format("{0:C2}",c.TotalTP))
+                        }
+
+                    </td>
+                    <td id="urlTrn" onclick="tdclick('@v.SzRtServerId','@v.LRetailStoreId','@v.StoreGroupId','@string.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)')">
+                        @if (c.TotalRtServer != c.TotalAmount || c.TotalTP != c.TotalAmount)
+                        {
+
+                            <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                        }
+                        else
+                        {
+                            <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                        }
+                    </td>
+                    @*@if (c.TotalRtServer != c.TotalAmount || c.TotalTP != c.TotalAmount)
+                        {
+                            <td onclick="window.location.href ='@Url.Action("Filter", "Transactions", new
+                                                                           {
+                                                                               ServerRt = v.SzRtServerId,
+                                                                               Store = v.LRetailStoreId,
+                                                                               StoreGroup = v.StoreGroupId
+                                                                               ,TransactionDateTo=string.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+                                                                               ,TransactionDateFrom=string.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+
+                                                                           })'">
+
+                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#ff0101"></i></div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td onclick="window.location.href ='@Url.Action("Filter", "Transactions", new  { ServerRt = v.SzRtServerId,Store=v.LRetailStoreId,StoreGroup=v.StoreGroupId
+                                                                                                                           ,TransactionDateTo=string.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+                                                                                                                           ,TransactionDateFrom=string.Format("{0:dd-MM-yyyy}",v.OperationClosureDatetime)
+
+                                                                                                                            })'">
+                                <div class="hoverInfo"><i class="fa fa-info-circle" style="color:#33cc33"></i></div>
+                            </td>
+                        }*@
+                </tr>
+                <tr>
+                    <th style="width: 9%">Aliquota IVA</th>
+                    <th style="width: 8%">Natura</th>
+                    <th style="width: 12%">Vendite</th>
+                    <th style="width: 12%">Annulli</th>
+                    <th style="width: 12%">Resi</th>
+                    <th style="width: 12%">IVA</th>
+                    <th style="width: 15%">Importo AdE</th>
+                    <th style="width: 15%">Importo TP</th>
+                    <th style="width: 5%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!c.HasVentilation)
+                {
+                    if (c.TransactionVats != null && c.TransactionVats.Count > 0)
+                    {
+                        @foreach (var tv in c.TransactionVats)
+                        {
+                            <tr>
+                                <td> @string.Format("{0:0.00}", tv.DVatRate)</td>
+                                <td>@tv.SzVatNature</td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DSaleAmount))
+                                </td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DReturnAmount))
+                                </td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DVoidAmount))
+                                </td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DVatAmount))
+                                </td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DSumAmount))
+                                </td>
+                                <td>
+                                    @(string.Format("{0:C2}", tv.DPosGrossAmount))
+                                </td>
+                                <td>
+                                    @if ((tv.DSaleAmount + tv.DVatAmount - tv.DReturnAmount - tv.DVoidAmount) != tv.DPosGrossAmount)
+                                    {
+                                        <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <th colspan="2">Totale</th>
+                            <td>@string.Format("{0:C2}", c.TotalSale)</td>
+                            <td>@string.Format("{0:C2}", c.TotalReturn)</td>
+                            <td>@string.Format("{0:C2}", c.TotalVoid)</td>
+                            <td>@string.Format("{0:C2}", c.TotalVat)</td>
+                            <td>@string.Format("{0:C2}", c.TotalAmount)</td>
+                            <td>@string.Format("{0:C2}", c.TotalTP)</td>
+                            <td>
+                                @if (c.TotalAmount != c.TotalTP)
+
+                                {
+                                    <i class="fa fa-circle" style="color:#ff0101; "></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle" style="color:#33cc33; "></i>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row divider">&nbsp;</div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Data/Ora segnalazione</th>
+                    <th>Note Descrittiva dell'errore</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (c.RtServerTransmissionsDetailRtReport != null)
+                {
+                    @foreach (var t in c.RtServerTransmissionsDetailRtReport)
+                    {
+
+                        <tr>
+                            <td>@t.DEventDateTime</td>
+                            <td>@t.SzEventNote</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    }
+}

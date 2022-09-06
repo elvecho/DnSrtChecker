@@ -1,0 +1,106 @@
+﻿@model List<DnSrtChecker.Models.ViewModels.RtServerViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    
+    <div class="container" >
+        <div class="row">
+            @*<div class="col-sm-2"></div>*@
+            <div class="col-sm-8">
+                <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+                <h2 class="titlePage">
+                    Manutenzione dei Server RT
+                </h2>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-sm-2"></div>*@
+            <div class="col-sm-8">
+                <p>
+                    <a asp-action="Create" class="btn btn-manage"><i class="fa fa-plus"></i>&nbsp;Server RT</a>
+                </p>
+            </div>
+
+        </div>
+        <div class="row">
+            @*<div class="col-sm-2"></div>*@
+            <div class="">
+
+                <table class="table table-bordered ">
+                    <thead>
+                        <tr>
+                            <th style="display:none;"></th>
+                            <th style="display:none;"></th>
+                            <th>
+                                @Html.DisplayName("Insegna")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Punto vendita")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Server RT")
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayName("Stato servizio")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Indirizzo IP")
+                            </th>
+                            <th style="text-align:center;">
+                                @Html.DisplayName("Gestione")
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody >
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="display:none;" name="storeId">
+                                    @item.LRetailStoreId
+                                </td>
+                                <td style="display:none;" name="storeGroupId">
+                                    @item.LStoreGroupId
+                                </td>
+                                <td>
+                                    (@Html.DisplayFor(modelItem => item.LStoreGroupId)) @Html.DisplayFor(modelItem => item.SzGroupDescription)
+                                </td>
+                                <td>
+                                    (@Html.DisplayFor(modelItem => item.LRetailStoreId)) @Html.DisplayFor(modelItem => item.szRetailStoreDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SzRtServerId)
+                                </td>
+                                <td class="elementCentered">
+                                    <label class="switch">
+                                        @if (item.BOnDutyFlag ?? false)
+                                        {
+                                            <input name="statusServer" id="@item.SzRtServerId.Trim()" value="@(item.BOnDutyFlag)" type="checkbox" onChange="changeStatusServer(this)" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input name="statusServer" id="@item.SzRtServerId.Trim()" value="@(item.BOnDutyFlag)" type="checkbox" onChange="changeStatusServer(this)" />
+                                        }
+                                        <span class="slider round">
+                                        </span>
+                                    </label>
+                                </td>
+                                <td><a href="https://@item.SzIpAddress" target="_blank">@item.SzIpAddress</a></td>
+                                <td colspan="1" class="elementCentered">
+                                    <a asp-action="Edit" asp-route-id="@item.SzRtServerId.Trim()" asp-route-retailStoreId="@item.LRetailStoreId" asp-route-storeGroupId="@item.LStoreGroupId"><i class="fa fa-edit iconColorRetex"></i></a> &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <a asp-action="Delete" asp-route-id="@item.SzRtServerId.Trim()" asp-route-retailStoreId="@item.LRetailStoreId" asp-route-storeGroupId="@item.LStoreGroupId"><i class="fa fa-trash iconRetexBlue"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+

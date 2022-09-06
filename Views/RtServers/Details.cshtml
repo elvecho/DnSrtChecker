@@ -1,0 +1,187 @@
+﻿@model DnSrtChecker.Models.ViewModels.RtServerViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="container">
+    <div>
+        <div>
+            <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+            <h2 class="titlePage" style="font-family:RalewayBold">Dettaglio Server RT</h2>
+            <div>
+                <h4 class="titlePage" style="display:inline-block;">Server RT : </h4><label class="control-label" style="font-size: 16px;"> &nbsp;@Html.DisplayFor(model => model.RtServerStatus.SzRtServerId)</label>
+            </div>
+            <div>
+                <h4 class="titlePage" style="display:inline-block;">Punto Vendita : </h4><label class="control-label" style="font-size: 16px;">&nbsp;@Html.DisplayFor(model => model.L.LStoreGroup.SzDescription) @Html.DisplayFor(model => model.L.StoreNameComplet)</label>
+            </div>
+        </div>
+        <hr />
+    </div>
+    
+    <div class="panel panel-default">
+        @*<div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-2"> <label class="control-label">Insegna:</label></div>
+                <div class="col-sm-4 label-content-panel ">
+                    @Html.DisplayFor(model => model.L.LStoreGroup.SzDescription)
+                </div>
+                <div class="col-sm-2"> <label class="control-label">Punto vendita:</label></div>
+                <div class="col-sm-4 label-content-panel ">
+                    @Html.DisplayFor(model => model.L.StoreNameComplet)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2"> <label class="control-label" style="font-family:Raleway">Server RT:</label></div>
+                <div class="col-sm-4">
+                    @Html.DisplayFor(model => model.RtServerStatus.SzRtServerId)
+                </div>
+            </div>
+        </div>*@
+        <div class="panel-body panel-table">
+            <table class="table  table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            Parametro Controllo
+                        </th>
+                        <th>
+                            Valore
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="2">Errore</th>
+                        <td>
+                            @if (Model.RtServerStatus.BOnErrorFlag == true)
+                            {
+                                <label>Si</label>
+                            }
+                            else
+                            {
+                                <label>No</label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Anomalia</th>
+                        @if (Model.RtServerStatus.BOnErrorFlag == true)
+                        {
+                            <td bgcolor="#FF0000">
+                                @Html.DisplayFor(model => model.RtServerStatus.SzErrorDescription, new { @style = "background-color:red;color:white;" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.DisplayFor(model => model.RtServerStatus.SzErrorDescription)
+                            </td>
+                        }
+
+
+                    <tr>
+                        <th colspan="2">Ventilazione IVA</th>
+                        <td>
+                            @if (@Model.RtServerStatus.BVatVentilationFlag.HasValue)
+                            {
+                                if ((bool)@Model.RtServerStatus.BVatVentilationFlag)
+                                {
+                                    <label>Si</label>
+                                }
+                                else
+                                {
+                                    <label>No</label>
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Ultima Chiusura - Numero</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.LLastClosureNmbr)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Ultima chiusura - Esito</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.SzLastCloseResult)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Gran Totale</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.DGrandTotalAmount)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Pendenze - Numero pacchetti</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.LPendingTransmissionNmbr)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Pendenze - Numero giorni</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.LPendingTransmissionDays)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Trasmissione in corso</th>
+                        <td>
+                            @if (@Model.RtServerStatus.BRunningTransmissionFlag.HasValue)
+                            {
+                                @if ((bool)@Model.RtServerStatus.BRunningTransmissionFlag)
+                                {
+                                    <label>Si</label>
+                                }
+                                else
+                                {
+                                    <label>No</label>
+
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Sched. – Trasmissione tra minuti</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.LTransmissionScheduleMinutesLeft)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Sched. – Trasmissione ripeti ogni ore</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.LTransmissionScheduleHoursRepeat)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Data/ora ultimo controllo</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.DLastDateTimeCollected)
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Data/ora ultima lettura dati</th>
+                        <td>
+                            @Html.DisplayFor(model => model.RtServerStatus.DLastDateTimeRead)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-sm-6" style="text-align:right;">
+                    <a asp-action="Edit" asp-route-id="@Model.RtServerStatus.SzRtServerId.Trim()" asp-route-retailStoreId="@Model.L.LRetailStoreId" asp-route-storeGroupId="@Model.L.LStoreGroupId"><i class="fa fa-edit iconColorRetex"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,249 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.TransactionAffiliationViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="">
+        <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+        <h2 class="titlePage">Transazioni</h2>
+        <div>
+            <h4 class="titlePage" style="display:inline-block;">Server RT : </h4><label class="control-label" style="font-size: 16px;"> &nbsp;@(ViewBag.serverRt ?? String.Empty)</label>
+        </div>
+        <div>
+            <h4 class="titlePage" style="display:inline-block;">Punto Vendita : </h4><label class="control-label" style="font-size: 16px;">&nbsp;@(ViewBag.storeGroup ?? String.Empty) @(ViewBag.store ?? String.Empty)</label>
+        </div>
+        <hr />
+    </div>
+    <div class="">
+        <div class="panel panel-default">
+            <div class="panel-heading subtitle" style="text-align:center;">
+                <h4>Filtri</h4>
+            </div>
+            <form asp-action="Filter" method="get" id="filtersForm" name="filtersForm">
+                <div class="panel-body panel-table">
+                    <table class="filtersTable">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="hidden" id="StoreGroupID" name="storeGroupID" value="@(ViewBag.storeGroupID ?? String.Empty)" />
+                                    <input type="hidden" id="StoreID" name="storeID" value="@(ViewBag.storeID ?? String.Empty)" />
+
+                                    <input id="storeGroup" name="storeGroup" placeholder="Insegna" class="form-control form-text " readonly="readonly" value="@(ViewBag.storeGroup ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input id="store" name="store" placeholder="Punto vendita" class="form-control form-text " readonly="readonly" value="@(ViewBag.store ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input id="serverRt" name="serverRt" placeholder="Server RT" class="form-control form-text" readonly="readonly" value="@(ViewBag.serverRt ?? String.Empty)" />
+                                </td>
+                                @*<td>
+                                <input id="pos" name="pos" placeholder="Cassa" class="form-control form-text" value="@(ViewBag.pos ?? String.Empty)" />
+                            </td>
+                            <td>
+                                <input id="lRtClosureNmbr" name="lRtClosureNmbr" placeholder="N° Chiusura" class="form-control form-text"  style="width:100%;display:inline-block;" value="@(ViewBag.lRtClosureNmbr ?? String.Empty)" />
+
+                            </td>*@
+                                <td>
+                                    <div class="input-group  " style="display:inline-table;">
+                                        <input class="form-control form-text" placeholder="Data" name="transactionDateFrom"
+                                               readonly="readonly" value="@(ViewBag.DateFrom ?? String.Empty)" />
+                                        @*<span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    @*@Html.DropDownList("isChecked", null, new { @class = "form-control form-text" })*@
+                                    @Html.DropDownList("IsCheckedOrArchived", null, new { @class = "form-control form-text" })
+                                </td>
+
+
+                                <td style="float:left;">
+                                    <button type="submit"  onclick="displayBusyIndicator()" class="btn btn-manage">
+                                        <i class="fa fa-search "></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                @*<td>
+                                <div class="input-group datepicker " style="display:inline-table;">
+                                    <input type="text" class="form-control " placeholder="A Data"  name="transactionDateTo"
+                                           readonly="readonly" value="@(ViewBag.transactionDateTo ?? String.Empty)" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </td>*@
+                                <td>
+                                    @*@Html.DropDownList("NonCompliantOrHasMismatch", null, new { @class = "form-control form-text " })*@
+                                    @Html.DropDownList("Conformity", null, new { @class = "form-control form-text " })
+
+                                </td>
+
+
+                                <td>
+                                    <input id="PosWorkstationNmbr" name="PosWorkstationNmbr" placeholder="Cassa" class="form-control form-text" style="width:100%;display:inline-block;" value="@(ViewBag.pos ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input id="PosTaNmbr" name="PosTaNmbr" placeholder="Transazione TP" class="form-control form-text" style="width:100%;display:inline-block;" value="@(ViewBag.PosTaNmbr ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input id="RtClosureNmbr" name="RtClosureNmbr" placeholder="N° Chiusura" class="form-control form-text" style="width:100%;display:inline-block;" value="@(ViewBag.RtClosureNmbr ?? String.Empty)" />
+
+                                </td>
+                                <td>
+                                    <input id="RtDocumentNmbr" name="RtDocumentNmbr" placeholder="N° Documento" class="form-control form-text" style="width:100%;display:inline-block;" value="@(ViewBag.RtDocumentNmbr ?? String.Empty)" />
+                                </td>
+
+
+                                <td style="float:right;">
+                                    <button asp-action="GetListRtServersNoFilters" onclick="displayBusyIndicator()" class="btn btn-manage" id="btnEraser">
+                                        <i class="fa fa-eraser "></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <partial name="_LoadingPartial" />
+            @*end*@
+        </div>
+    </div>
+    <div class="">
+        @*@foreach (var item in Model)
+        {*@
+            @*//if (item.RtServers.Count > 0)
+            //{*@
+        <div class="panel panel-default">
+            @*<div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-2"> <label class="control-label">Insegna:</label></div>
+                <div class="col-sm-3 label-content-panel ">@item.RtServers.FirstOrDefault().L.LStoreGroup.SzDescription</div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"> <label class="control-label">Punto vendita:</label></div>
+                <div class="col-sm-3 label-content-panel ">@item.RtServers.FirstOrDefault().L.StoreNameComplet</div>
+            </div>
+            <div class="row">
+            </div>
+        </div>*@
+            @*@foreach (var srv in item.RtServers)
+        {*@
+           
+                <div class="panel-body panel-table">
+                    @if (!ViewBag.TimeOut)
+                    {
+                        <table class="table table-bordered tableTr " style="table-layout:fixed">
+                            <thead>
+                                <!--<tr class="clickable">
+                        @*<th colspan="10">ServerRT:   @srv.SzRtServerId</th>-->*@
+                        @*<td><i class="fa fa-chevron-down"></i></td>*@
+                        @*<td colspan="8">@srv.SzRtServerId</td>*@
+                        <!--</tr>-->
+                                <tr>
+                                    <th rowspan="3">Data/Ora</th>
+                                    <th rowspan="2">Cassa</th>
+                                    <th rowspan="2">Transazione TP</th>
+                                    <th rowspan="2">Importo TP</th>
+                                    <th rowspan="2">Documento RT</th>
+                                    <th rowspan="3">Importo RT</th>
+                                    <th rowspan="2">Conformità</th>
+                                    <th rowspan="2">Differenza</th>
+                                    <th rowspan="2">Verificata</th>
+                                    <th rowspan="2">Archiviata</th>
+                                    <th rowspan="2">Verifica</th>
+                                </tr>
+                            </thead>
+                            @*@if (model.Count > 0)
+                        {*@
+                        <tbody>
+
+                            @foreach (var tr in Model)
+                            {
+                                //test logico transaction(va bene filtrare usando la dat o no?
+                                @*@if (tr.DLastUpdateLocal.HasValue &&
+                 tr.DLastUpdateLocal.Value.ToString("dd-MM-yyyy") == ViewBag.dateFrom)
+            {*@
+                                <tr>
+                                    <td> @Html.DisplayFor(t => tr.DPosDateTime)</td>
+                                    <td> @tr.LPosWorkstationNmbr</td>
+                                    <td> @tr.LPosTaNmbr</td>
+                                    <td> @(String.Format("{0:0.00}", (tr.DPosTransactionTurnover/100)))</td>
+                                    <td> @Html.DisplayFor(t => tr.DocumentRT) </td>
+                                    <td> @(String.Format("{0:0.00}", (tr.DRtTransactionTurnover/100)))</td>
+                                    @*@if(tr.BRtNonCompliantFlag==true && ( tr.errorNonCompliant==true || tr.TransactionHasMismatch==true))*@
+                                    @if (tr.BRtNonCompliantFlag == true && tr.TransactionHasMismatch == true)
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#ff0101;"></i></td>
+                                    }
+                                    else
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#33cc33;"></i></td>
+                                    }
+                                    @if (tr != null && tr.TransactionHasMismatch)
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#ff0101;"></i></td>
+                                    }
+                                    else
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#33cc33;"></i></td>
+                                    }
+                                    @*@if ((tr.BRtNonCompliantFlag == true || tr.TransactionHasMismatch)
+                    && (tr.BTransactionCheckedFlag == false || !tr.BTransactionCheckedFlag.HasValue))
+                {
+                    <td><i class="fa fa-circle" style="color:#ff0101;"></i></td>
+                }
+                else
+                {
+                    <td><i class="fa fa-circle" style="color:#33cc33;"></i></td>
+                }*@
+                                    @if (tr.BTransactionCheckedFlag ?? false/*TransactionIsChecked*/)
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#33cc33;"></i></td>
+                                    }
+                                    else
+                                    {
+                                        <td><i class="fa fa-circle" style="color: #808080;"></i></td>
+                                    }
+                                    @if (tr.BTransactionArchivedFlag ?? false)
+                                    {
+                                        <td><i class="fa fa-circle" style="color:#33cc33;"></i></td>
+                                    }
+                                    else
+                                    {
+                                        <td><i class="fa fa-circle" style="color: #808080;"></i></td>
+                                    }
+                                    <td>
+                                        @*//int LRtDocumentNmbr, string SzRtServerId,
+                    //int LRetailStoreId, int LStoreGroupId, int LRtClosureNmbr*@
+                                        <a href="@Url.Action("Details", "Transactions",new { SzRtDocumentId = tr.SzRtDocumentId,
+                                            SzRtServerId = ViewBag.serverRt , LRetailStoreId = ViewBag.storeID,
+                                            LStoreGroupId = ViewBag.StoreGroupID
+                                        })" class="btn btn-manage" onclick="displayBusyIndicator()">
+                                            <i class="fa fa-info-circle fa-1x "></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @*}*@
+                            }
+                        </tbody>
+                            @*}*@
+                        </table>
+
+                    }
+                    else 
+                    {
+                        <div class="alert">
+                            Le selezioni impostate non hanno ottenuto risposta nel tempo massimo previsto. Modificare le selezioni o riprovare più tardi.
+                        </div>
+                    }
+                </div>
+            @*}*@
+        </div>
+            @*}*@
+        @*}*@
+    </div>
+</div>

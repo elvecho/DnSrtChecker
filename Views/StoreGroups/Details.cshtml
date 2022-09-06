@@ -1,0 +1,26 @@
+﻿@model DnSrtChecker.Models.ViewModels.StoreGroupViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+    <div class="container">
+        <a onclick="history.go(-1);" class="btn btn-manage"><i class="fa fa-chevron-left iconColorStyleRetex"></i></a>
+
+        <h2 class="titlePage">Dettaglio Insegna</h2>
+
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SzDescription)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.SzDescription)
+            </dd>
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.LStoreGroupId">Modifica</a>             
+        </div>
+    </div>

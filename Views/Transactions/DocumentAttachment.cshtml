@@ -1,0 +1,79 @@
+﻿===============================================================
+<b>Identificativo DGFE   :</b> @Model.DGFEId
+<b>Server Telematico     :</b> @Model.Mark &nbsp; @Model.Model
+<b>Matricola             :</b> @Model.ServerRT
+<b>Punto Cassa           :</b> @Model.DeviceId
+@string.Concat("===============================================================", "")
+<b>Documento Commerciale @if (Model.CanceledReceipt != null) { <b>Di Reso</b>}</b>
+---------------------------------------------------------------
+<b>Azzeramento n:</b>      @Model.Receipt.ZNumber
+<b>Documento   n:</b>      @Model.Receipt.DocumentNumber
+<b>Data:</b>               @Model.Receipt.Date
+<b>Ora:</b>                @Model.Receipt.Time
+<b>CCDC: @Model.CCDC1 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.CCDC2</b>
+@if(Model.CanceledReceipt != null)
+{
+<p>----------------------------------------------------------------</p>
+<b>Documento di riferimento</b>
+<p>----------------------------------------------------------------</p>
+<b>Data e Ora</b>                   <b>Punto Cassa</b>        <b>Progressivo</b>
+<label>@Model.CanceledReceipt.ReceiptReference.DateTime</label>           <label>@Model.RegisterId</label>           <label>@Model.CanceledReceipt.ReceiptReference.Sequence</label>
+}
+    
+===============================================================
+<table class="homeRecap">
+    <thead>
+        <tr><th>Quantità</th><th>Descrizione</th><th>Prezzo / tipo</th><th>IVA %</th><th>Importo(€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rd in Model.Receipt.ReceiptDetails)
+        {
+            if (rd.ItemSale != null)
+            {
+                <tr>
+                    <td>@rd.ItemSale.Quantity </td>
+                    <td>@rd.ItemSale.Description</td>
+                    <td>@rd.ItemSale.AmountFormatted</td>
+                    <td>@rd.ItemSale.VatCode.Rate</td>
+                    <td>@rd.ItemSale.Price</td>
+                </tr>
+            }
+            if (rd.ItemModifier != null)
+            {
+    <tr>
+        <th>Sconto</th>
+        <td></td>
+        <td></td>
+        <td>@rd.ItemModifier.VatCode.Rate</td>
+        <td>@rd.ItemModifier.Sign@rd.ItemModifier.Amount</td>
+    </tr>
+            }
+        }
+        <tr><td colspan="5">--------------------------------------------------------------</td></tr>
+        <tr>
+            <th>Totale Euro:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> @Model.Receipt.Turnover</td>
+        </tr>
+        <tr>
+            <th>Di cui IVA:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            @foreach (var vat in Model.Receipt.VatTotals)
+            {
+            <tr>
+                <td></td>
+                <td>@vat.VatCode.RateFormatted</td>
+                <td></td>
+                <td></td>
+                <td>@vat.TaxAmountFormatted</td>
+            </tr>
+                }
+            <tr><td colspan="5">===============================================================</</td></tr>
+        </tbody>
+</table>

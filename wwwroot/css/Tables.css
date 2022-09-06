@@ -1,0 +1,47 @@
+﻿.tableManut {
+    padding: 10px 10px 10px 10px;
+}
+.elementCentered {
+    text-align: center;
+}
+.tableDetail td, .tableDetail th{
+    word-wrap: break-word;
+}
+.tableDetail {
+    table-layout: fixed;
+}
+.table thead:first-child {
+    /*background-color: #F7F7F7;*/
+    background-color: #d9d9d9;
+}
+.table tbody {
+    background-color: #ffffff;
+}
+.tdRight{
+    text-align:right;
+}
+.tdCenter{
+    text-align:center;
+}
+.tableIva td{
+    text-align:right;
+}
+.tableIva thead th:not(:first-child){
+    text-align:center;
+}
+.homeRecap td, .homeRecapth{
+    /*min-width:100px;*/
+   
+}
+.homeRecap th {
+    word-wrap:break-word;
+}
+.table > thead > tr > th {
+    vertical-align: middle;
+}
+.table.fontRd tr td{
+    font-family: Raleway;
+}
+.table.fontRh tr th {
+    font-family: Raleway;
+}

@@ -1,0 +1,307 @@
+﻿@model IEnumerable<DnSrtChecker.Models.ViewModels.RtServerViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container">
+    <div class="">        
+        <h2 class="titlePage">Lista dei Server RT</h2>
+        <hr />
+    </div>
+    <div class="" style="width:1155px;max-width:1155px;">
+        <div class="panel panel-default">
+            <div class="panel-heading subtitle" style="text-align:center;">
+                <h4>Filtri</h4>
+            </div>
+            <form id="filtersForm" name="filtersForm" asp-page="/Index" method="get">
+                <div class="panel-body panel-table">
+                    <table class="filtersTable ">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="storeGroup" name="storeGroup" placeholder="Insegna" class="form-control form-text " value="@(ViewBag.storeGroup ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input type="text" id="store" name="store" placeholder="Punto vendita" class="form-control form-text" value="@(ViewBag.store ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <input type="text" id="serverRt" name="serverRt" placeholder="Server RT" class="form-control form-text" value="@(ViewBag.serverRt ?? String.Empty)" />
+                                </td>
+                                <td>
+                                    <div class="input-group datepicker " style="display:inline-table;margin:3px;">
+                                        <input type="text" class="form-control " placeholder="Da Data" id="transmissionDateFrom" name="transmissionDateFrom" value="@(ViewBag.transmissionDateFrom ?? String.Empty)" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar calendar-from"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="float:left;margin-top:6px;">
+                                    <button type="submit" class="btn btn-manage" onclick="displayBusyIndicator()" id="btnFilter">
+                                        <i class="fa fa-search "></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("status", null, new { @class = "form-control form-text " })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("error", null, new { @class = "form-control  form-text " })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("nonCompliant", null, new { @class = "form-control form-text" })
+                                </td>
+                                <td>
+                                    <div class="input-group datepicker " style="display:inline-table;margin:3px;">
+                                        <input type="text" class="form-control" placeholder="A Data" id="transmissionDateTo" name="transmissionDateTo" value="@(ViewBag.transmissionDateTo ?? String.Empty)" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar calendar-to"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="float:right;margin-top:6px;">
+                                    <button asp-action="GetListRtServersNoFilters" onclick="displayBusyIndicator()" class="btn btn-manage">
+                                        <i class="fa fa-eraser"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+            <partial name="_LoadingPartial" />
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        @if (!ViewBag.TimeOut)
+        {
+            <table id="homeRecap" class="table  table-bordered tableTr homeRecap">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Insegna</th>
+                        <th rowspan="2">Punto vendita</th>
+                        <th rowspan="2">Server</th>
+                        <th rowspan="2">Stato</th>
+                        <th rowspan="2">Controllo Errori</th>
+                        <th rowspan="2">Transazioni</th>
+                        <th rowspan="2">Ultima chiusura</th>
+                        <th colspan="2">Totale Negozio</th>
+                        <th rowspan="2">Totale AdE</th>
+                        <th rowspan="2">Trasmissioni</th>
+                    </tr>
+                    <tr><th>Totale TP</th><th>Totale RT</th></tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SzGroupDescription)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.szRetailStoreDescription)
+                            </td>
+                            <td>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="@item.DRtDeviceClosureDateTime">
+                                    @Html.DisplayFor(modelItem => item.SzRtServerId)
+                                </span>
+                            </td>
+                            @if (User.IsInRole("OperatorIT"))
+                            {
+                        <td onclick="window.location.href = '@Url.Action("Details", "RtServers", new { id = item.SzRtServerId.Trim(), retailStoreId = item.LRetailStoreId, storeGroupId = item.LStoreGroupId })'">
+                            <input type="hidden" value="@(item.BOnDutyFlag ?? false)" />
+                            @if (item.BOnDutyFlag ?? false)
+                            {
+                                <div class="hoverInfo">
+                                    <span title="Dettagli RtServer">
+                                        <i class="fa fa-info-circle" style="color:#33cc33"></i>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="hoverInfo">
+                                    <span title="Dettagli RtServer">
+                                        <i class="fa fa-info-circle" style="color:#ff0101"></i>
+                                    </span>
+                                </div>
+                            }
+                        </td>
+                            }
+                            else
+                            {
+                        <td>
+                            <input type="hidden" value="@(item.BOnDutyFlag ?? false)" />
+                            @if (item.BOnDutyFlag ?? false)
+                            {
+                                <div class="hoverInfo"><div><i class="fa fa-circle" style="color:#33cc33"></i></div></div>
+
+                            }
+                            else
+                            {
+                                <div class="hoverInfo"><i class="fa fa-circle" style="color:#ff0101"></i></div>
+
+                            }
+                        </td>
+                            }
+
+                        <td style="text-align:center;">
+                            <input type="hidden" value="@(item.BOnErrorFlag ?? false)" />
+
+                            @if (item.BOnDutyFlag.HasValue && item.BOnDutyFlag.Value)
+                            {
+                                @if (item.BOnErrorFlag != null && (item.BOnErrorFlag ?? false))
+                                {
+                                    <div class="hoverInfo"><i class="fa fa-circle" style="color:#ff0101; "></i></div>
+
+                                }
+                                else
+                                {
+                                    <div class="hoverInfo"><i class="fa fa-circle" style="color:#33cc33; "></i></div>
+
+                                }
+                            }
+                            else
+                            {
+                                <div class="hoverInfo"><i class="fa fa-circle" style="color:#808080; "></i></div>
+
+                            }
+                        </td>
+                            <td onclick="window.location.href ='@Url.Action("Index", "Transactions",
+            new
+            {
+                RtServerId = item.SzRtServerId.Trim(),
+                retailStoreId = item.LRetailStoreId,
+                storeGroupId = item.LStoreGroupId,
+                dateFrom = item.DRtDeviceClosureDateTime.Value
+            ,
+                RetailDescription = item.szRetailStoreDescription,
+                GroupDescription = item.SzGroupDescription
+            })'">
+                                @if (item.BOnDutyFlag.HasValue && item.BOnDutyFlag.Value)
+                                {
+                                    if (item.BWarningFlag == true)
+                                    {
+                                        <div class="hoverInfo">
+                                            <span title="Dettagli transazioni">
+                                                <i class="fa fa-info-circle" style="color:#ff0101" onclick="displayBusyIndicator()"></i>
+                                            </span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="hoverInfo">
+                                            <span title="Dettagli transazioni">
+                                                <i class="fa fa-info-circle" style="color:#33cc33" onclick="displayBusyIndicator()"></i>
+                                            </span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="hoverInfo">
+                                        <span title="Dettagli transazioni">
+                                            <i class="fa fa-circle" style="color:#808080;" onclick="displayBusyIndicator()"></i>
+                                        </span>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DRtDeviceClosureDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTotalTP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTotalRT)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DTotalADE)
+                            </td>                            
+
+                            @if (item.DRtDeviceClosureDateTime != null)
+                            {
+
+                        <td onclick="window.location.href ='@Url.Action("InitialList", "Transmissions", new
+                                                           {
+                                                               id = item.SzRtServerId.Trim(),
+                                                               storeId = item.LRetailStoreId,
+                                                               storeGroupId = item.LStoreGroupId,
+                                                               date = String.Format("{0:yyyy-MM-dd}", item.DRtDeviceClosureDateTime),
+                                                               RetailDescription = item.szRetailStoreDescription,
+                                                               GroupDescription = item.SzGroupDescription,
+                                                               DTotaleADE = item.DTotalADE,
+                                                               DTotalRT = item.DTotalRT,
+                                                               DTotalTP = item.DTotalTP
+                                                           })'">
+
+
+                            @if (item.TrasnmissionError == 0)
+                            {
+                                
+                                <div class="hoverInfo">
+                                    <span title="Dettagli trasmissioni">
+                                        <i class="fa fa-info-circle" style="color:#33cc33" onclick="displayBusyIndicator()"></i>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="hoverInfo">
+                                    <span title="Dettagli trasmissioni">
+                                        <i class="fa fa-info-circle" style="color:#ff0101" onclick="displayBusyIndicator()"></i>
+                                    </span>
+                                </div>
+                            }
+                        </td>
+                            }
+                            else
+                            {
+                        <td>
+                            <div class="hoverInfo">
+                                <span title="Dettagli trasmissioni">
+                                    <i class="fa fa-info-circle" style="color: #33cc33;" onclick="displayBusyIndicator()"></i>
+                                </span>
+                            </div>
+                        </td>
+                            }
+
+                        </tr>
+                    }
+                    @if (ViewBag.store != null && ViewBag.store != "0")
+                    {
+                        <tr>
+                            <td colspan="7">Totale</td>
+                            <td>
+                                @(((Decimal)ViewBag.DTotalTPSum).ToString("C2"))
+                            </td>
+                            <td>
+                                @(((Decimal)ViewBag.DTotalRTSum).ToString("C2"))
+                            </td>
+                            <td>
+                                @(((Decimal)ViewBag.DTotalADESum).ToString("C2"))
+                            </td>
+                            <td></td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert">
+                Le selezioni impostate non hanno ottenuto risposta nel tempo massimo previsto. Modificare le selezioni o riprovare più tardi.
+            </div>
+        }
+    </div>
+
+
+</div>
